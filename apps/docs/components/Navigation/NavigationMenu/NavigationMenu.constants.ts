@@ -799,14 +799,10 @@ export const realtime: NavMenuConstant = {
       url: '/guides/realtime/concepts',
     },
     {
-      name: 'Quickstart',
-      url: '/guides/realtime/quickstart',
-    },
-    {
-      name: 'Features',
+      name: 'Quickstarts',
       url: undefined,
       items: [
-        { name: 'Broadcast', url: '/guides/realtime/broadcast' },
+        { name: 'Broadcast', url: '/guides/realtime/quickstarts/broadcast' },
         { name: 'Presence', url: '/guides/realtime/presence' },
         {
           name: 'Postgres Changes',
