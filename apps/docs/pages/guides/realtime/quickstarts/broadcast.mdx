@@ -21,6 +21,24 @@ Let's explore how to implement Realtime Broadcast so you can integrate it into y
 
   <StepHikeCompact.Step step={1}>
   
+    <StepHikeCompact.Details title="Install the client">
+
+      Install the Supabase JavaScript client.
+
+    </StepHikeCompact.Details>
+
+    <StepHikeCompact.Code>
+
+      ```bash
+        npm install @supabase/supabase-js
+      ```
+
+    </StepHikeCompact.Code>
+
+  </StepHikeCompact.Step>
+
+  <StepHikeCompact.Step step={2}>
+  
     <StepHikeCompact.Details title="Create the first client">
 
       This client will be used to listen for messages.
@@ -32,16 +50,21 @@ Let's explore how to implement Realtime Broadcast so you can integrate it into y
     <StepHikeCompact.Code>
 
       ```js
-        import { createClient } from '@supabase/supabase-js'
+        import {
+          createClient
+        } from '@supabase/supabase-js'
 
-        const clientA = createClient('https://<project>.supabase.co', '<your-anon-key>')
+        const clientA = createClient(
+          'https://<project>.supabase.co',
+          '<your-anon-key>'
+        )
       ```
 
     </StepHikeCompact.Code>
 
   </StepHikeCompact.Step>
 
-  <StepHikeCompact.Step step={2}>
+  <StepHikeCompact.Step step={3}>
   
     <StepHikeCompact.Details title="Create a channel">
 
@@ -59,7 +82,7 @@ Let's explore how to implement Realtime Broadcast so you can integrate it into y
 
   </StepHikeCompact.Step>
 
-  <StepHikeCompact.Step step={3}>
+  <StepHikeCompact.Step step={4}>
   
     <StepHikeCompact.Details title="Listen for messages">
 
@@ -71,7 +94,11 @@ Let's explore how to implement Realtime Broadcast so you can integrate it into y
 
       ```js
         channelA
-          .on('broadcast', { event: 'test' }, (payload) => console.log(payload))
+          .on(
+            'broadcast',
+            { event: 'test' },
+            (payload) => console.log(payload)
+          )
           .subscribe()
       ```
 
@@ -79,7 +106,7 @@ Let's explore how to implement Realtime Broadcast so you can integrate it into y
 
   </StepHikeCompact.Step>
 
-  <StepHikeCompact.Step step={4}>
+  <StepHikeCompact.Step step={5}>
   
     <StepHikeCompact.Details title="Create the second client">
 
@@ -90,14 +117,17 @@ Let's explore how to implement Realtime Broadcast so you can integrate it into y
     <StepHikeCompact.Code>
 
       ```js
-        const clientB = createClient('https://<project>.supabase.co', '<your-anon-key>')
+        const clientB = createClient(
+          'https://<project>.supabase.co',
+          '<your-anon-key>'
+        )
       ```
 
     </StepHikeCompact.Code>
 
   </StepHikeCompact.Step>
 
-  <StepHikeCompact.Step step={5}>
+  <StepHikeCompact.Step step={6}>
   
     <StepHikeCompact.Details title="Create another channel">
 
@@ -115,7 +145,7 @@ Let's explore how to implement Realtime Broadcast so you can integrate it into y
 
   </StepHikeCompact.Step>
 
-  <StepHikeCompact.Step step={6}>
+  <StepHikeCompact.Step step={7}>
   
     <StepHikeCompact.Details title="Send message">
 
@@ -133,7 +163,9 @@ Let's explore how to implement Realtime Broadcast so you can integrate it into y
             channelB.send({
               type: 'broadcast',
               event: 'test',
-              payload: { message: 'hello, world' },
+              payload: {
+                message: 'hello, world'
+              },
             })            
           }
         })
@@ -143,7 +175,7 @@ Let's explore how to implement Realtime Broadcast so you can integrate it into y
 
   </StepHikeCompact.Step>
 
-  <StepHikeCompact.Step step={7}>
+  <StepHikeCompact.Step step={8}>
   
     <StepHikeCompact.Details title="First client receives message">
 
@@ -161,192 +193,66 @@ There are additional Broadcast functionality that you can enable when creating a
 
 ### Self-send messages
 
-You can have a client send a message and then receive it.
+You can have a client send a message and then receive it by setting Broadcast's `self` config to `true`.
 
-<StepHikeCompact>
+```js
+  // clientC setup
+ 
+  const channelC = clientC.channel('room-2', {
+    config: {
+      broadcast: {
+        self: true
+      }
+    }
+  })
 
-  <StepHikeCompact.Step step={1}>
+  channelC
+    .on(
+      'broadcast',
+      { event: 'test-my-messages' },
+      (payload) => console.log(payload)
+    )
 
-    <StepHikeCompact.Details title="Create a client">
-
-      Go to your Supabase project's [API Settings](https://supabase.com/dashboard/project/_/settings/api) and grab the `URL` and `anon` public API key.
-
-    </StepHikeCompact.Details>
-
-    <StepHikeCompact.Code>
-
-      ```js
-        import { createClient } from '@supabase/supabase-js'
-
-        const clientC = createClient('https://<project>.supabase.co', '<your-anon-key>')
-      ```
-
-    </StepHikeCompact.Code>
-
-  </StepHikeCompact.Step>
-
-  <StepHikeCompact.Step step={2}>
-
-    <StepHikeCompact.Details title="Create a channel with self-send capability">
-
-      This channel will enable the ability to roundtrip a message by sending and then receiving it.
-
-    </StepHikeCompact.Details>
-
-    <StepHikeCompact.Code>
-
-      ```js
-        const channelC = clientC.channel('room-2', {
-          config: {
-            broadcast: {
-              self: true
-            }
-          }
-        })
-      ```
-
-    </StepHikeCompact.Code>
-
-  </StepHikeCompact.Step>
-
-  <StepHikeCompact.Step step={3}>
-
-    <StepHikeCompact.Details title="Listen for messages">
-
-      Set up channel handler to listen for messages.
-
-    </StepHikeCompact.Details>
-
-    <StepHikeCompact.Code>
-
-      ```js
-        channelC
-          .on('broadcast', { event: 'test-my-messages' }, (payload) => console.log(payload))
-      ```
-
-    </StepHikeCompact.Code>
-
-  </StepHikeCompact.Step>
-
-  <StepHikeCompact.Step step={3}>
-
-    <StepHikeCompact.Details title="Send message">
-
-      Subscribe to channel and send a message.
-
-    </StepHikeCompact.Details>
-
-    <StepHikeCompact.Code>
-
-      ```js
-        channelC.subscribe((status) => {
-          if (status === 'SUBSCRIBED') {
-            channelC.send({
-              type: 'broadcast',
-              event: 'test-my-messages',
-              payload: { message: 'talking to myself' },
-            })
-          }
-        })
-      ```
-
-    </StepHikeCompact.Code>
-
-  </StepHikeCompact.Step>
-
-  <StepHikeCompact.Step step={4}>
-
-    <StepHikeCompact.Details title="Same client receives message">
-
-      `clientC` receives the message that it sent.
-
-    </StepHikeCompact.Details>
-
-  </StepHikeCompact.Step>
-
-</StepHikeCompact>
+  channelC.subscribe((status) => {
+    if (status === 'SUBSCRIBED') {
+      channelC.send({
+        type: 'broadcast',
+        event: 'test-my-messages',
+        payload: { message: 'talking to myself' },
+      })
+    }
+  })
+```
 
 ### Acknowledge messages
 
-You can confirm that Realtime received your message.
+You can confirm that Realtime received your message by setting Broadcast's `ack` config to `true`.
 
-<StepHikeCompact>
+```js
+  // clientD setup
 
-  <StepHikeCompact.Step step={1}>
+  const channelD = clientD.channel('room-3', {
+    config: {
+      broadcast: {
+        ack: true
+      }
+    }
+  })
 
-    <StepHikeCompact.Details title="Create a client">
+  channelD.subscribe(async (status) => {
+    if (status === 'SUBSCRIBED') {
+      const resp = await channelD.send({
+        type: 'broadcast',
+        event: 'acknowledge',
+        payload: {},
+      })
 
-      Go to your Supabase project's [API Settings](https://supabase.com/dashboard/project/_/settings/api) and grab the `URL` and `anon` public API key.
+      console.log('resp', resp)
+    }
+  })
+```
 
-    </StepHikeCompact.Details>
-
-    <StepHikeCompact.Code>
-
-      ```js
-        import { createClient } from '@supabase/supabase-js'
-
-        const clientC = createClient('https://<project>.supabase.co', '<your-anon-key>')
-      ```
-
-    </StepHikeCompact.Code>
-
-  </StepHikeCompact.Step>
-
-  <StepHikeCompact.Step step={2}>
-
-    <StepHikeCompact.Details title="Create a channel with acknowledgement capability">
-
-      This channel will enable Realtime to confirm that it received your channel's sent message.
-
-    </StepHikeCompact.Details>
-
-    <StepHikeCompact.Code>
-
-      ```js
-        const channelD = clientD.channel('room-3', {
-          config: {
-            broadcast: {
-              ack: true
-            }
-          }
-        })
-      ```
-
-    </StepHikeCompact.Code>
-
-  </StepHikeCompact.Step>
-
-  <StepHikeCompact.Step step={3}>
-
-    <StepHikeCompact.Details title="Send message with acknowledgement">
-
-      Subscribe to channel, send a message, and get acknowledgement that Realtime received it.
-
-      If Broadcast config `ack` is not set to `true` when creating channel, the promise returned by call to `channelD.send` will resolve immediately.
-
-    </StepHikeCompact.Details>
-
-    <StepHikeCompact.Code>
-
-      ```js
-        channelD.subscribe(async (status) => {
-          if (status === 'SUBSCRIBED') {
-            const resp = await channelD.send({
-              type: 'broadcast',
-              event: 'acknowledge',
-              payload: {},
-            })
-
-            console.log('resp', resp)
-          }
-        })
-      ```
-
-    </StepHikeCompact.Code>
-
-  </StepHikeCompact.Step>
-
-</StepHikeCompact>
+If the `ack` config is not set to `true` when creating the channel, the promise returned by call to `channelD.send` will resolve immediately.
 
 ## Client-side rate limit
 
