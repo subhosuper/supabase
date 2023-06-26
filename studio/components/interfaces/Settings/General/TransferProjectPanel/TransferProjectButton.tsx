@@ -17,6 +17,7 @@ import { useStore, useSelectedProject, useCheckPermissions } from 'hooks'
 import { useProjectTransferPreviewQuery } from 'data/projects/project-transfer-preview-query'
 import { useProjectTransferMutation } from 'data/projects/project-transfer-mutation'
 import { useOrganizationsQuery } from 'data/organizations/organizations-query'
+import InformationBox from 'components/ui/InformationBox'
 
 const TransferProjectButton: FC<{}> = () => {
   const { ui } = useStore()
@@ -122,7 +123,7 @@ const TransferProjectButton: FC<{}> = () => {
         onCancel={() => toggle()}
         visible={isOpen}
         loading={isLoading}
-        size={'medium'}
+        size={'large'}
         header={`Transfer project ${project?.name}`}
         customFooter={
           <div className="flex items-center space-x-2 justify-end">
@@ -184,7 +185,7 @@ const TransferProjectButton: FC<{}> = () => {
                   <p className="font-bold">Features</p>
                   <p>
                     Moving your project to an organization with a smaller subscription plan may
-                    result in the loss of certain features (memory, compute power, etc).
+                    result in the loss of certain features (i.e. image transformations).
                   </p>
                 </div>
               </li>
@@ -273,21 +274,21 @@ const TransferProjectButton: FC<{}> = () => {
                 )}
                 {transferPreviewData && transferPreviewData.warnings.length > 0 && (
                   <Alert withIcon variant="warning" title="Warnings for project transfer">
-                    <ul className="list-disc list-inside">
+                    <div className="space-y-1">
                       {transferPreviewData.warnings.map((warning) => (
-                        <li key={warning.key}>{warning.message}</li>
+                        <p key={warning.key}>{warning.message}</p>
                       ))}
-                    </ul>
+                    </div>
                   </Alert>
                 )}
                 {transferPreviewData && transferPreviewData.errors.length > 0 && (
-                  <Alert withIcon variant="danger" title="Errors for project transfer">
-                    <ul className="list-disc list-inside">
+                  <Alert withIcon variant="danger" title="Project cannot be transferred">
+                    <div className="space-y-1">
                       {transferPreviewData.errors.map((error) => (
-                        <li key={error.key}>{error.message}</li>
+                        <p key={error.key}>{error.message}</p>
                       ))}
-                    </ul>
-                    {transferPreviewData.members_exceeding_free_project_limit.length && (
+                    </div>
+                    {transferPreviewData.members_exceeding_free_project_limit.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-sm text-scale-1100">
                           The following members have reached their maximum limits for the number of
@@ -321,12 +322,6 @@ const TransferProjectButton: FC<{}> = () => {
                     <p>{transferError.message}</p>
                   </Alert>
                 )}
-                {transferPreviewData &&
-                  transferPreviewData.members_exceeding_free_project_limit.length > 0 && (
-                    <div>
-                      c{JSON.stringify(transferPreviewData.members_exceeding_free_project_limit)}
-                    </div>
-                  )}
               </div>
             </Modal.Content>
           </Loading>
