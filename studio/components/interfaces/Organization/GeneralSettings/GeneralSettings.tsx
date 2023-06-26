@@ -2,7 +2,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { observer } from 'mobx-react-lite'
-import { Collapsible, Form, IconChevronRight, IconHelpCircle, Input, Toggle } from 'ui'
+import { Collapsible, Form, IconChevronRight, Input, Toggle } from 'ui'
 import { PermissionAction } from '@supabase/shared-types/out/constants'
 
 import { useStore, checkPermissions, useFlag } from 'hooks'
@@ -18,12 +18,13 @@ import {
   FormSectionContent,
   FormSectionLabel,
 } from 'components/ui/Forms'
+import OrganizationBillingMigrationPanel from './OrganizationBillingMigrationPanel'
 
 const GeneralSettings = () => {
   const { app, ui } = useStore()
   const { slug } = useParams()
   const [open, setOpen] = useState(false)
-  const { name, opt_in_tags } = ui.selectedOrganization ?? {}
+  const { name, opt_in_tags, subscription_id } = ui.selectedOrganization ?? {}
 
   const formId = 'org-general-settings'
   const isOptedIntoAi = opt_in_tags?.includes('AI_SQL_GENERATOR_OPT_IN')
@@ -31,9 +32,11 @@ const GeneralSettings = () => {
 
   const showCMDK = useFlag('dashboardCmdk')
   const allowCMDKDataOptIn = useFlag('dashboardCmdkDataOptIn')
+  const orgBillingMigrationEnabled = useFlag('orgBillingMigration')
 
   const canUpdateOrganization = checkPermissions(PermissionAction.UPDATE, 'organizations')
   const canDeleteOrganization = checkPermissions(PermissionAction.UPDATE, 'organizations')
+  const canMigrateOrganization = checkPermissions(PermissionAction.UPDATE, 'organizations')
 
   const onUpdateOrganization = async (values: any, { setSubmitting, resetForm }: any) => {
     if (!canUpdateOrganization) {
@@ -186,6 +189,9 @@ const GeneralSettings = () => {
           )
         }}
       </Form>
+      {orgBillingMigrationEnabled && canMigrateOrganization && !subscription_id && (
+        <OrganizationBillingMigrationPanel />
+      )}
 
       {canDeleteOrganization && <OrganizationDeletePanel />}
     </div>
