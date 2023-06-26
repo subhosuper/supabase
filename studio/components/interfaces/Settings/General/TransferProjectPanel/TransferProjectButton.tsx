@@ -192,27 +192,29 @@ const TransferProjectButton: FC<{}> = () => {
           </Modal.Content>
           <Modal.Content>
             {organizations.length > 0 && (
-              <Listbox
-                label="Select Target Organization"
-                layout="vertical"
-                value={selectedOrg}
-                onChange={(slug) => setSelectedOrg(slug)}
-                placeholder="Select Organization"
-              >
-                <Listbox.Option disabled key="no-results" label="Select Organization" value="">
-                  Select Organization
-                </Listbox.Option>
-                {organizations.map((x: any) => (
-                  <Listbox.Option
-                    key={x.id}
-                    label={x.name}
-                    value={x.slug}
-                    addOnBefore={() => <IconUsers />}
-                  >
-                    {x.name}
+              <div className="mt-8 mx-4 border-t pt-4">
+                <Listbox
+                  label="Select Target Organization"
+                  layout="vertical"
+                  value={selectedOrg}
+                  onChange={(slug) => setSelectedOrg(slug)}
+                  placeholder="Select Organization"
+                >
+                  <Listbox.Option disabled key="no-results" label="Select Organization" value="">
+                    Select Organization
                   </Listbox.Option>
-                ))}
-              </Listbox>
+                  {organizations.map((x: any) => (
+                    <Listbox.Option
+                      key={x.id}
+                      label={x.name}
+                      value={x.slug}
+                      addOnBefore={() => <IconUsers />}
+                    >
+                      {x.name}
+                    </Listbox.Option>
+                  ))}
+                </Listbox>
+              </div>
             )}
           </Modal.Content>
 
