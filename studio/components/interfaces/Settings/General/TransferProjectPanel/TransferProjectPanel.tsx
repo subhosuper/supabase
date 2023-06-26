@@ -5,7 +5,7 @@ import Panel from 'components/ui/Panel'
 
 import TransferProjectButton from './TransferProjectButton'
 import { FormHeader } from 'components/ui/Forms'
-import { IconInfo } from 'ui'
+import { IconTruck } from 'ui'
 
 interface Props {}
 
@@ -18,18 +18,18 @@ const TransferProjectPanel: FC<Props> = ({}) => {
     <section>
       <FormHeader
         title="Transfer Project"
-        description="Transfer your project to a different organization without downtime."
+        description="Transfer your project to a different organization with no downtime."
       />
       <Panel>
         <Panel.Content>
-          <div className="flex justify-between">
-            <div className="flex items-center space-x-4">
-              <IconInfo />
-              <div className='space-y-1'>
+          <div className="flex justify-between items-center gap-8">
+            <div className="flex space-x-4">
+              <IconTruck className="mt-1" />
+              <div className="space-y-1 xl:max-w-lg">
                 <p className="text-sm">Transfer project to another organization</p>
                 <p className="text-sm text-scale-1100">
-                  Projects can be transferred between organizations as long as the project owner is
-                  a member of both the source and destinations of the transfer.
+                  To transfer projects, the owner must be a member of both the source and
+                  destination organizations.
                 </p>
               </div>
             </div>

@@ -1,5 +1,15 @@
 import { FC, useEffect, useMemo, useState } from 'react'
-import { Alert, Button, IconUsers, Listbox, Loading, Modal } from 'ui'
+import {
+  Alert,
+  Button,
+  IconLoader,
+  IconShield,
+  IconTool,
+  IconUsers,
+  Listbox,
+  Loading,
+  Modal,
+} from 'ui'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { PermissionAction } from '@supabase/shared-types/out/constants'
 
@@ -69,9 +79,9 @@ const TransferProjectButton: FC<{}> = () => {
       await transferProject({ projectRef, targetOrganizationSlug: selectedOrg })
       ui.setNotification({
         category: 'success',
-        
+
         duration: 5000,
-        message: `Successfully transfered project ${project?.name}.`,
+        message: `Successfully transferred project ${project?.name}.`,
       })
       setIsOpen(false)
     } catch {
@@ -132,20 +142,51 @@ const TransferProjectButton: FC<{}> = () => {
       >
         <div className="space-y-4 py-4 text-scale-1100">
           <Modal.Content>
-            <p className="text-sm">
-              Projects can be transferred between organizations as long as the project owner is a
-              member of both the source and destinations of the transfer. Please keep the following
-              in mind:
-            </p>
-            <ul className="list-disc pl-4 text-sm mt-1 space-y-1">
-              <li>There is no downtime or restrictions involved when transfering a project</li>
-              <li>
-                Depending on your role in the target organization, you might have less permissions
-                after transfering
+            <Alert
+              variant="info"
+              className="!px-4 !py-3"
+              title="To transfer projects, the owner must be a member of both the source and destination
+              organizations."
+              withIcon
+            ></Alert>
+
+            <p className="font-bold mt-6 text-sm">Transfer considerations:</p>
+
+            <ul className="mt-4 space-y-5 text-sm px-4">
+              <li className="flex gap-4">
+                <span className="shrink-0 mt-1">
+                  <IconLoader />
+                </span>
+                <div>
+                  <p className="font-bold">No downtime</p>
+                  <p>There is no downtime or restrictions involved when transferring a project.</p>
+                </div>
               </li>
-              <li>
-                If you move your project to an organization with a smaller subscription plan, you
-                may lose access to some features
+
+              <li className="flex gap-4">
+                <span className="shrink-0 mt-1">
+                  <IconShield />
+                </span>
+                <div>
+                  <p className="font-bold">Permissions</p>
+                  <p>
+                    Depending on your role in the target organization, your level of permissions may
+                    change after transfer.
+                  </p>
+                </div>
+              </li>
+
+              <li className="flex gap-4">
+                <span className="shrink-0 mt-1">
+                  <IconTool w={14} className="flex-shrink-0" />
+                </span>
+                <div>
+                  <p className="font-bold">Features</p>
+                  <p>
+                    Moving your project to an organization with a smaller subscription plan may
+                    result in the loss of certain features (memory, compute power, etc).
+                  </p>
+                </div>
               </li>
             </ul>
           </Modal.Content>
