@@ -223,7 +223,7 @@ const TransferProjectButton: FC<{}> = () => {
               <div className="px-4">
                 {transferPreviewData && transferPreviewData.valid && (
                   <div className="text-sm text-scale-1100 p-4 mb-4 bg-scale-400">
-                    {transferPreviewData.source_subscription_plan ===
+                    {transferPreviewData.source_subscription_plan !==
                     transferPreviewData.target_subscription_plan ? (
                       <div>
                         <p>
@@ -248,9 +248,11 @@ const TransferProjectButton: FC<{}> = () => {
                       ) : (
                         <span>
                           {' '}
-                          Your current organization will be granted $
-                          {transferPreviewData.credits_on_source_organization} in credits as
-                          proration.
+                          Your current organization will be granted{' '}
+                          <span className="text-brand-900">
+                            ${transferPreviewData.credits_on_source_organization}
+                          </span>{' '}
+                          in credits as proration.
                         </span>
                       )}
                       {transferPreviewData.costs_on_target_organization === 0 ? (
@@ -261,9 +263,11 @@ const TransferProjectButton: FC<{}> = () => {
                       ) : (
                         <span>
                           {' '}
-                          The target organization will be billed $
-                          {transferPreviewData.costs_on_target_organization} immediately to prorate
-                          for the remainder of the billing period.
+                          The target organization will be billed{' '}
+                          <span className="text-brand-900">
+                            ${transferPreviewData.costs_on_target_organization}
+                          </span>{' '}
+                          immediately to prorate for the remainder of the billing period.
                         </span>
                       )}
                     </div>
