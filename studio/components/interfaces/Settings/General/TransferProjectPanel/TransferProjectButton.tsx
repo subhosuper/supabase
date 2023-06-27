@@ -143,15 +143,12 @@ const TransferProjectButton: FC<{}> = () => {
       >
         <div className="space-y-4 py-4 text-scale-1100">
           <Modal.Content>
-            <Alert
-              variant="info"
-              className="!px-4 !py-3"
-              title="To transfer projects, the owner must be a member of both the source and destination
-              organizations."
-              withIcon
-            ></Alert>
+            <p>
+              To transfer projects, the owner must be a member of both the <br /> source and
+              destination organizations.
+            </p>
 
-            <p className="font-bold mt-6 text-sm">Transfer considerations:</p>
+            <p className="font-bold mt-6 text-sm">Transferring considerations:</p>
 
             <ul className="mt-4 space-y-5 text-sm px-4">
               <li className="flex gap-4">
@@ -223,9 +220,9 @@ const TransferProjectButton: FC<{}> = () => {
             {transferPreviewData && <Modal.Separator />}
 
             <Modal.Content>
-              <div className="py-2">
+              <div className="px-4">
                 {transferPreviewData && transferPreviewData.valid && (
-                  <div className="text-sm text-scale-1100">
+                  <div className="text-sm text-scale-1100 p-4 mb-4 bg-scale-400">
                     {transferPreviewData.source_subscription_plan ===
                     transferPreviewData.target_subscription_plan ? (
                       <div>
@@ -242,7 +239,7 @@ const TransferProjectButton: FC<{}> = () => {
                       </div>
                     )}
 
-                    <div>
+                    <div className="my-4">
                       {transferPreviewData.credits_on_source_organization === 0 ? (
                         <span>
                           {' '}
@@ -291,9 +288,9 @@ const TransferProjectButton: FC<{}> = () => {
                     {transferPreviewData.members_exceeding_free_project_limit.length > 0 && (
                       <div className="space-y-2">
                         <p className="text-sm text-scale-1100">
-                          The following members have reached their maximum limits for the number of
-                          active free plan projects within organizations where they are an
-                          administrator or owner:
+                          These members have reached their maximum limits for the number of active
+                          Free plan projects within organizations where they are an administrator or
+                          owner:
                         </p>
                         <ul className="pl-5 text-sm list-disc text-scale-1100">
                           {(transferPreviewData.members_exceeding_free_project_limit || []).map(
@@ -306,19 +303,19 @@ const TransferProjectButton: FC<{}> = () => {
                         </ul>
                         <p className="text-sm text-scale-1100">
                           These members will need to either delete, pause, or upgrade one or more of
-                          these projects before you're able to downgrade this project.
+                          their projects before you can downgrade this project.
                         </p>
                       </div>
                     )}
                   </Alert>
                 )}
                 {transferPreviewError && !transferError && (
-                  <Alert withIcon variant="danger" title="Project cannot be tranfered">
+                  <Alert withIcon variant="danger" title="Project cannot be transferred">
                     <p>{transferPreviewError.message}</p>
                   </Alert>
                 )}
                 {transferError && (
-                  <Alert withIcon variant="danger" title="Project cannot be tranfered">
+                  <Alert withIcon variant="danger" title="Project cannot be transferred">
                     <p>{transferError.message}</p>
                   </Alert>
                 )}
